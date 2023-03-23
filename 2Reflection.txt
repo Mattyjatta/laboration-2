@@ -33,4 +33,21 @@
     The **`setCurrentSpeed()`** method: The **`setCurrentSpeed()`** method is added to enforce the **`currentSpeed`** constraints. 
     It checks if the input speed is within the allowed range of [0, enginePower]. If it is within the valid range, the **`currentSpeed`** is updated; otherwise, the method does nothing.
 
-    3.) 
+    3.) 1. **`gas(double amount)`**: Accepts a value between 0 and 1 (inclusive) and increases the current speed of the car based on the provided amount without exceeding the car's engine power. Calls to **`gas()`** should never result in the speed decreasing.
+
+2. **`brake(double amount)`**: Accepts a value between 0 and 1 (inclusive) and decreases the current speed of the car based on the provided amount without going below 0. Calls to **`brake()`** should never result in the speed increasing.
+
+The implementations of **`gas()`** and **`brake()`** methods in both **`Volvo240`** and **`Scania`** follow this contract. 
+
+Our design follows the Liskov Substitution Principle, as both **`Volvo240`** and **`Scania`** can be used interchangeably in any context where the **`Car`** type is expected.
+
+To handle duplicated code between **`Scania`**, car transporters, and repair shops, we created an interface called **`CarLoader`** with common methods for loading and unloading cars. 
+The **`CarTransporter`** class implements this interface, and the **`CarWorkshop`** class also implements the same interface, allowing them to share the same behavior.
+
+We decided to use subclassing when the new class shared some characteristics or behavior with an existing class, such as **`CarTransporter`** extending **`Scania`**.
+ We used composition and delegation when creating the **`CarWorkshop`** class, as it needed to share the behavior of loading and unloading cars with the **`CarTransporter`** class, but it didn't share any other characteristics with it.
+  Therefore, composition and delegation were more appropriate in this case.
+
+We needed to modify the design from Lab 1 to make these extensions. 
+One indication that our design from Lab 1 did not follow the Open-Closed Principle could have been the need to change the existing code significantly to implement the new features. 
+If we had identified common behaviors and used proper abstractions/interfaces from the beginning, we could have made the design more extensible and easier to modify without violating the Open-Closed Principle.
